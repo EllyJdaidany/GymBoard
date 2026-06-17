@@ -1,4 +1,14 @@
-const API_BASE = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '')
+function resolveApiBase() {
+  const raw = import.meta.env.VITE_API_URL ?? '/api'
+  if (raw.startsWith('/')) {
+    return raw.replace(/\/$/, '')
+  }
+
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
+  return withProtocol.replace(/\/$/, '')
+}
+
+const API_BASE = resolveApiBase()
 
 export async function request(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
