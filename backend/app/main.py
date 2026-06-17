@@ -3,9 +3,9 @@ import os
 import re
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.requests import Request
+from fastapi.responses import JSONResponse
 from starlette.responses import Response
 
 from app.routers import admin, dots_leaderboard, health, members, pr_board, sync
@@ -86,7 +86,16 @@ app.add_middleware(
 
 @app.middleware("http")
 async def ensure_cors_on_error_responses(request: Request, call_next):
-    response = await call_next(request)
+    try:
+        response = await call_next(request)
+    except Exception:
+        response = JSONResponse(status_code=500, content={"detail": "Internal server error"})
+    return _apply_cors_headers(request, response)
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    response = JSONResponse(status_code=500, content={"detail": "Internal server error"})
     return _apply_cors_headers(request, response)
 
 app.include_router(health.router)
