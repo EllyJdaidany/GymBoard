@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Pirulen;
+  src:
+    url("/fonts/Pirulen-Regular.otf") format("opentype"),
+    local("Pirulen"),
+    local("pirulen rg");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Milker;
+  src:
+    url("/fonts/Milker.otf") format("opentype"),
+    local("Milker"),
+    local("Milker Regular");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-catalyst-base: #1e202c;
+  --color-catalyst-surface: #31323e;
+  --color-catalyst-accent: #60519b;
+  --color-catalyst-text: #bfc0d1;
+  --font-pirulen: Pirulen, ui-sans-serif, system-ui, sans-serif;
+  --font-milker: Milker, ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes tv-scroll-once {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(var(--tv-scroll-distance, 0px));
+  }
+}
+
+.tv-scroll-once {
+  animation: tv-scroll-once var(--tv-scroll-duration, 30s) linear var(--tv-scroll-delay, 0s) forwards;
+}
+
+.tv-scroller-grid {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) minmax(5.5rem, 6.5rem) repeat(4, minmax(7rem, 1fr));
+  align-items: stretch;
+  column-gap: 1.5rem;
+  padding-inline: 1.5rem;
+}
+
+.tv-scroller-grid-compact {
+  grid-template-columns:
+    2rem
+    minmax(5rem, 2fr)
+    minmax(3.75rem, 1fr)
+    minmax(4rem, 1fr)
+    minmax(4rem, 1fr)
+    minmax(4rem, 1fr)
+    minmax(5rem, 1.15fr);
+  column-gap: 0.625rem;
+  padding-inline: 0.5rem;
+  align-items: stretch;
+}
+
+.tv-dots-scroller-grid {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) minmax(5.5rem, 6.5rem) minmax(7rem, 1fr) minmax(7rem, 1fr);
+  align-items: stretch;
+  column-gap: 1.5rem;
+  padding-inline: 1.5rem;
+}
+
+.tv-dots-scroller-grid-compact {
+  grid-template-columns:
+    2rem
+    minmax(5rem, 2fr)
+    minmax(4rem, 1fr)
+    minmax(4.5rem, 1fr)
+    minmax(4rem, 1fr);
+  column-gap: 0.625rem;
+  padding-inline: 0.5rem;
+  align-items: stretch;
+}
+
+@keyframes tv-podium-card-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tv-podium-card {
+  animation: tv-podium-card-rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--podium-rank, 1) * 60ms + 100ms);
+}
+
+.tv-podium-card-wrap {
+  position: relative;
+  flex-shrink: 0;
+  padding: 28px;
+  margin: -28px;
+}
+
+.tv-podium-card-shell {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  background-color: var(--color-catalyst-surface);
+  border-color: rgba(191, 192, 209, 0.12);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+}
+
+.tv-podium-rank-1 .tv-podium-card-shell {
+  border-color: rgba(212, 175, 55, 0.28);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 0 44px 6px rgba(212, 175, 55, 0.46);
+}
+
+.tv-podium-rank-2 .tv-podium-card-shell {
+  border-color: rgba(196, 206, 220, 0.26);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 0 40px 5px rgba(186, 198, 214, 0.38);
+}
+
+.tv-podium-rank-3 .tv-podium-card-shell {
+  border-color: rgba(205, 127, 50, 0.26);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 0 40px 5px rgba(205, 127, 50, 0.38);
+}

@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+supabase
+httpx
+apscheduler
+python-dotenv
+tzdata
+pydantic[email]
+pandas
+email-validator
