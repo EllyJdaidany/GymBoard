@@ -1,4 +1,4 @@
-import { request } from './api'
+import { request, uploadRequest } from './api'
 
 export const adminApi = {
   getStats: () => request('/admin/stats'),
@@ -31,4 +31,9 @@ export const adminApi = {
     }),
   getGymPrs: () => request('/admin/gym-prs'),
   getGymPr: (memberId) => request(`/admin/gym-prs/${memberId}`),
+  importCsv: (file) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return uploadRequest('/admin/import-csv', formData)
+  },
 }

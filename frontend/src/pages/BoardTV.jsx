@@ -363,10 +363,6 @@ export default function BoardTV() {
         onNext={goToNextWeightClass}
       />
 
-      <footer className="absolute bottom-[25px] left-[25px] z-20">
-        <p className="font-pirulen text-6xl tracking-[0.15em] text-catalyst-text">CATALYST</p>
-      </footer>
-
       {hasScroller ? (
         <div
           className={[

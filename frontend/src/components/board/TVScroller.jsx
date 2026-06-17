@@ -1,7 +1,11 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import WeightDisplay from '../shared/WeightDisplay'
 import VerificationBadge, { GRID_BADGE_SLOT_CLASS } from '../shared/VerificationBadge'
-import LiftCrown, { GRID_CROWN_SLOT_CLASS } from '../shared/LiftCrown'
+import LiftCrown, {
+  GRID_CROWN_SLOT_CLASS,
+  LIFT_LEADER_UNIT_CLASS,
+  LIFT_LEADER_VALUE_CLASS,
+} from '../shared/LiftCrown'
 import {
   getEquipmentIndicator,
   getMemberBodyweight,
@@ -120,13 +124,15 @@ function GridLiftValue({
   showUnit = true,
 }) {
   const showCrown = isClassLiftLeader(liftLeaders, lift, memberId)
+  const valueClass = [valueClassName, showCrown && LIFT_LEADER_VALUE_CLASS].filter(Boolean).join(' ')
+  const unitClass = [unitClassName, showCrown && LIFT_LEADER_UNIT_CLASS].filter(Boolean).join(' ')
 
   return (
     <GridWeightCell showCrown={showCrown} reserveCrownSpace>
       <WeightDisplay
         kg={kg}
-        valueClassName={valueClassName}
-        unitClassName={unitClassName}
+        valueClassName={valueClass}
+        unitClassName={unitClass}
         showUnit={showUnit}
       />
     </GridWeightCell>

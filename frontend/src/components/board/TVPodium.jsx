@@ -1,6 +1,11 @@
 import WeightDisplay from '../shared/WeightDisplay'
 import VerificationBadge from '../shared/VerificationBadge'
-import LiftCrown, { CROWN_OVERLAY_CLASS, CROWN_VALUE_SLOT_CLASS } from '../shared/LiftCrown'
+import LiftCrown, {
+  CROWN_OVERLAY_CLASS,
+  CROWN_VALUE_SLOT_CLASS,
+  LIFT_LEADER_LABEL_CLASS,
+  LIFT_LEADER_VALUE_CLASS,
+} from '../shared/LiftCrown'
 import {
   getEquipmentIndicator,
   getMemberBodyweight,
@@ -11,15 +16,18 @@ import {
 } from './boardUtils'
 
 function LiftStat({ label, weightKg, valueClassName, labelClassName, showCrown = false }) {
+  const valueClass = [valueClassName, showCrown && LIFT_LEADER_VALUE_CLASS].filter(Boolean).join(' ')
+  const labelClass = [labelClassName, showCrown && LIFT_LEADER_LABEL_CLASS].filter(Boolean).join(' ')
+
   return (
     <div className="flex min-w-[4.5rem] shrink-0 flex-col items-center gap-1">
       <div className={CROWN_VALUE_SLOT_CLASS}>
         {showCrown ? <LiftCrown className={CROWN_OVERLAY_CLASS} /> : null}
-        <span className={`tabular-nums ${valueClassName}`}>
+        <span className={`tabular-nums ${valueClass}`}>
           {weightKg != null ? `${Number(weightKg).toFixed(1)}` : '—'}
         </span>
       </div>
-      <span className={labelClassName}>{label}</span>
+      <span className={labelClass}>{label}</span>
     </div>
   )
 }

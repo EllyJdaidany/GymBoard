@@ -19,6 +19,20 @@ export async function request(path, options = {}) {
     ...options,
   })
 
+  return parseResponse(response)
+}
+
+export async function uploadRequest(path, formData, options = {}) {
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    body: formData,
+    ...options,
+  })
+
+  return parseResponse(response)
+}
+
+async function parseResponse(response) {
   if (!response.ok) {
     let detail = `Request failed: ${response.status}`
     let candidates

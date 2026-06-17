@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import PageHeader from '../../components/shared/PageHeader'
 import Loading from '../../components/shared/Loading'
 import LinkOplModal from '../../components/admin/LinkOplModal'
+import ImportCsvPanel from '../../components/admin/ImportCsvPanel'
 import OplStatusPill from '../../components/admin/OplStatusPill'
 import { adminApi } from '../../services/adminApi'
 
@@ -106,6 +107,8 @@ export default function Dashboard() {
         <StatCard label="Needs review" value={stats.needs_review} />
         <StatCard label="No profile" value={stats.no_profile} />
       </section>
+
+      <ImportCsvPanel onImported={loadDashboard} />
 
       <section className="mb-8 rounded-xl border border-slate-800 bg-slate-900">
         <div className="border-b border-slate-800 px-6 py-4">

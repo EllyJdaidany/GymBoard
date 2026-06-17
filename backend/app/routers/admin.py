@@ -39,6 +39,7 @@ OTHER_STATUSES = ("needs_review", "error")
 class ImportSummary(BaseModel):
     created: int
     updated: int
+    already_exists: int
     skipped: int
     inactive_filtered: int
     excluded_plan_filtered: int
@@ -850,6 +851,7 @@ async def import_csv(file: UploadFile = File(...)) -> ImportCsvResponse:
             import_summary=ImportSummary(
                 created=int(import_result["created"]),
                 updated=int(import_result["updated"]),
+                already_exists=int(import_result["already_exists"]),
                 skipped=int(import_result["skipped"]),
                 inactive_filtered=int(import_result["inactive_filtered"]),
                 excluded_plan_filtered=int(import_result["excluded_plan_filtered"]),

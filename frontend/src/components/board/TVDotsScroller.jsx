@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import WeightDisplay from '../shared/WeightDisplay'
 import VerificationBadge, { GRID_BADGE_SLOT_CLASS } from '../shared/VerificationBadge'
+import TVMeetLabel from './TVMeetLabel'
 import { sortDotsEntriesByScore } from './boardUtils'
 
 const SCROLLER_STYLES = {
@@ -11,6 +12,7 @@ const SCROLLER_STYLES = {
     rowGap: 'gap-3',
     rankClass: 'font-pirulen text-3xl text-catalyst-accent',
     nameClass: 'truncate text-3xl font-semibold text-catalyst-text',
+    meetClass: 'mt-1 text-base',
     headerClass: 'text-lg font-semibold uppercase tracking-wider text-catalyst-text/50',
     bodyweightValueClass: 'text-2xl font-semibold text-catalyst-accent',
     bodyweightUnitClass: 'text-lg text-catalyst-accent/80',
@@ -27,6 +29,7 @@ const SCROLLER_STYLES = {
     rowGap: 'gap-2',
     rankClass: 'font-pirulen text-xl text-catalyst-accent',
     nameClass: 'min-w-0 text-lg font-semibold leading-tight text-catalyst-text',
+    meetClass: 'mt-0.5 text-xs',
     headerClass: 'text-xs font-semibold uppercase tracking-wider text-catalyst-text/50',
     bodyweightValueClass: 'text-base font-semibold text-catalyst-accent',
     bodyweightUnitClass: 'text-xs text-catalyst-accent/80',
@@ -77,7 +80,7 @@ function GridBadgeHeaderCell({ children, className }) {
 }
 
 function DotsScrollerRow({ entry, rank, styles }) {
-  const { member, dots_score, total_kg, bodyweight_kg } = entry
+  const { member, dots_score, total_kg, bodyweight_kg, meet_name, achieved_date } = entry
 
   return (
     <div className={styles.rowClass}>
@@ -89,6 +92,11 @@ function DotsScrollerRow({ entry, rank, styles }) {
           <span className={styles.nameClass}>
             {member.first_name} {member.last_name}
           </span>
+          <TVMeetLabel
+            meetName={meet_name}
+            achievedDate={achieved_date}
+            className={styles.meetClass}
+          />
         </div>
       </GridCell>
       <GridCell>

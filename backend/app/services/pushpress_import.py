@@ -125,13 +125,6 @@ def _find_member_by_email(supabase: Any, email: str) -> dict[str, Any] | None:
     return response.data[0] if response.data else None
 
 
-def _needs_opl_matching(opl_match_status: Any) -> bool:
-    if opl_match_status is None:
-        return True
-    if isinstance(opl_match_status, float) and pd.isna(opl_match_status):
-        return True
-    return str(opl_match_status).strip() == ""
-
 
 def _filter_active_members(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     plan_status = df["planStatus"].map(_normalize_status)
@@ -218,6 +211,7 @@ def import_members_from_csv(file_path: str) -> dict[str, int | list[str]]:
     supabase = get_supabase()
     created = 0
     updated = 0
+    already_exists = 0
     skipped = 0
     invalid_email = 0
     missing_dob = 0
@@ -255,30 +249,21 @@ def import_members_from_csv(file_path: str) -> dict[str, int | list[str]]:
         existing = _find_member_by_email(supabase, email)
 
         if existing:
-            supabase.table("member").update(
-                {
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "date_of_birth": date_of_birth,
-                    "sex": _normalize_sex_from_gender(row.get("gender")),
-                }
-            ).eq("id", existing["id"]).execute()
-            updated += 1
-            member_id = str(existing["id"])
-            opl_match_status = existing.get("opl_match_status")
-        else:
-            insert_response = supabase.table("member").insert(member_payload).execute()
-            created += 1
-            member_id = str(insert_response.data[0]["id"])
-            opl_match_status = None
+            already_exists += 1
+            continue
 
-        if date_of_birth and _needs_opl_matching(opl_match_status):
+        insert_response = supabase.table("member").insert(member_payload).execute()
+        created += 1
+        member_id = str(insert_response.data[0]["id"])
+
+        if date_of_birth:
             queued_for_matching += 1
             queued_member_ids.append(member_id)
 
     return {
         "created": created,
         "updated": updated,
+        "already_exists": already_exists,
         "skipped": skipped,
         "inactive_filtered": inactive_filtered,
         "excluded_plan_filtered": excluded_plan_filtered,

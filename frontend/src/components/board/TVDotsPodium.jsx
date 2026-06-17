@@ -1,5 +1,6 @@
 import WeightDisplay from '../shared/WeightDisplay'
 import VerificationBadge from '../shared/VerificationBadge'
+import TVMeetLabel from './TVMeetLabel'
 import { PODIUM_LAYOUTS } from './TVPodium'
 
 function formatDotsScore(score) {
@@ -96,8 +97,10 @@ function DotsPodiumCard({
     return <div className={`${getDotsCardWidths(rank, layout)} ${cardMinHeight}`} />
   }
 
-  const { member, dots_score, total_kg, bodyweight_kg } = entry
+  const { member, dots_score, total_kg, bodyweight_kg, meet_name, achieved_date } = entry
   const { dotsValueClass, dotsLabelClass } = getDotsTypography(rank)
+  const meetLabelClass =
+    rank === 1 ? 'mt-2 text-sm leading-snug' : 'mt-1.5 text-xs leading-snug'
 
   return (
     <div
@@ -116,6 +119,7 @@ function DotsPodiumCard({
       >
         <div className="relative z-10 w-full min-w-0">
           <PodiumName member={member} rank={rank} maxClass={nameClass} />
+          <TVMeetLabel meetName={meet_name} achievedDate={achieved_date} className={meetLabelClass} />
           <div className="pt-3">
             <WeightDisplay
               kg={bodyweight_kg}

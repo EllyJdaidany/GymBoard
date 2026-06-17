@@ -1,5 +1,9 @@
 const CROWN_SRC = '/crown.png'
 
+export const LIFT_LEADER_VALUE_CLASS = '!text-amber-400'
+export const LIFT_LEADER_LABEL_CLASS = '!text-amber-400/90'
+export const LIFT_LEADER_UNIT_CLASS = '!text-amber-300'
+
 export const CROWN_OVERLAY_CLASS =
   'pointer-events-none absolute top-0 left-1/2 -translate-x-1/2'
 

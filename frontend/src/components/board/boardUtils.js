@@ -481,6 +481,22 @@ export function formatDate(dateStr) {
   })
 }
 
+export function formatTvMeetLine(meetName, achievedDate) {
+  if (!meetName) return ''
+
+  if (!achievedDate) return meetName
+
+  const parsed = new Date(`${achievedDate}T00:00:00`)
+  if (Number.isNaN(parsed.getTime())) return meetName
+
+  const formatted = parsed.toLocaleDateString(undefined, {
+    month: 'short',
+    year: 'numeric',
+  })
+
+  return `${meetName} · ${formatted}`
+}
+
 export function isOplLinked(member) {
   return member.opl_match_status && member.opl_match_status !== 'no_profile'
 }
