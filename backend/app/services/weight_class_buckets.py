@@ -54,6 +54,15 @@ SUPERHEAVY_BUCKET_BY_SEX = {
     "mx": "m-superheavy",
 }
 
+# Legacy USAPL women's 67.5kg class split into 65kg and 70kg buckets.
+LEGACY_FEMALE_67_5_SPLIT_KG = 65.0
+
+
+def resolve_legacy_female_67_5_bucket(bodyweight_kg: float | None) -> str:
+    if bodyweight_kg is not None and bodyweight_kg <= LEGACY_FEMALE_67_5_SPLIT_KG:
+        return "f-65"
+    return "f-69-70"
+
 
 def get_bucket_weight_limit_kg(bucket_id: str | None, ruleset: str | None) -> float | None:
     """Upper bodyweight limit (kg) for a bucket under a ruleset, or None if unlimited."""
@@ -98,6 +107,18 @@ def resolve_meet_bucket_id(
     class_token: Any,
     bodyweight_kg: float | None = None,
 ) -> tuple[str | None, str | None]:
+    normalized_sex = normalize_sex(sex)
+    normalized_class = normalize_class_token(class_token)
+    if normalized_sex == "female" and normalized_class == 67.5:
+        resolved_ruleset = ruleset if ruleset in RULESETS else "traditional"
+        bucket_id = resolve_legacy_female_67_5_bucket(
+            float(bodyweight_kg) if bodyweight_kg is not None else None
+        )
+        adjusted = adjust_bucket_for_bodyweight(
+            bucket_id, resolved_ruleset, bodyweight_kg, normalized_sex
+        )
+        return adjusted, resolved_ruleset
+
     bucket_id, resolved_ruleset = resolve_bucket_id_with_fallback(sex, ruleset, class_token)
     if not bucket_id:
         return None, resolved_ruleset

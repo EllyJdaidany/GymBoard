@@ -237,6 +237,16 @@ const SUPERHEAVY_BUCKET_BY_SEX = {
   mx: 'm-superheavy',
 }
 
+// Legacy USAPL women's 67.5kg class split into 65kg and 70kg buckets.
+const LEGACY_FEMALE_67_5_SPLIT_KG = 65
+
+function resolveLegacyFemale675Bucket(bodyweightKg) {
+  if (bodyweightKg != null && bodyweightKg <= LEGACY_FEMALE_67_5_SPLIT_KG) {
+    return 'f-65'
+  }
+  return 'f-69-70'
+}
+
 export function getBucketWeightLimitKg(bucketId, ruleset) {
   if (!bucketId || String(bucketId).endsWith('-superheavy')) return null
 
@@ -261,6 +271,18 @@ export function adjustBucketForBodyweight(bucketId, ruleset, bodyweightKg, sex) 
 }
 
 export function resolveMeetBucketIdWithFallback(sex, ruleset, classToken, bodyweightKg = null) {
+  const normalizedClass = normalizeClassToken(classToken)
+  if (sex === 'female' && normalizedClass === 67.5) {
+    const resolvedRuleset = ruleset === 'modern' || ruleset === 'traditional' ? ruleset : 'traditional'
+    const bucketId = adjustBucketForBodyweight(
+      resolveLegacyFemale675Bucket(bodyweightKg),
+      resolvedRuleset,
+      bodyweightKg,
+      sex,
+    )
+    return { bucketId, ruleset: resolvedRuleset }
+  }
+
   const resolved = resolveBucketIdWithFallback(sex, ruleset, classToken)
   if (!resolved.bucketId) return resolved
 

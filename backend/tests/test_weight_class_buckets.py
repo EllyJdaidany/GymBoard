@@ -56,3 +56,27 @@ def test_adjust_bucket_for_bodyweight_helper() -> None:
     assert adjust_bucket_for_bodyweight("m-120-125", "modern", 154.0, "male") == "m-superheavy"
     assert adjust_bucket_for_bodyweight("m-120-125", "modern", 120.0, "male") == "m-120-125"
     assert adjust_bucket_for_bodyweight("m-superheavy", "modern", 154.0, "male") == "m-superheavy"
+
+
+def test_legacy_female_67_5_meet_above_split_goes_to_69_70() -> None:
+    bucket_id, ruleset = resolve_meet_bucket_id("female", "traditional", 67.5, 67.0)
+    assert bucket_id == "f-69-70"
+    assert ruleset == "traditional"
+
+
+def test_legacy_female_67_5_meet_at_split_goes_to_65() -> None:
+    bucket_id, ruleset = resolve_meet_bucket_id("female", "traditional", 67.5, 65.0)
+    assert bucket_id == "f-65"
+    assert ruleset == "traditional"
+
+
+def test_legacy_female_67_5_meet_below_split_goes_to_65() -> None:
+    bucket_id, ruleset = resolve_meet_bucket_id("female", "traditional", 67.5, 64.5)
+    assert bucket_id == "f-65"
+    assert ruleset == "traditional"
+
+
+def test_legacy_female_67_5_meet_without_bodyweight_defaults_to_69_70() -> None:
+    bucket_id, ruleset = resolve_meet_bucket_id("female", "traditional", 67.5, None)
+    assert bucket_id == "f-69-70"
+    assert ruleset == "traditional"
